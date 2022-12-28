@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const sendResponse = require("../Helper/sendResponse");
 const studentController = require("../controllers/studentController");
-// const authentication = require("../middleware/adminAuthentication.js").verifyToken;
+const authentication = require("../middlewares/studentAuthentication").verifyToken;
 
 router.post("/add-student",(req, res) => {
 	let payload = req.body
@@ -19,22 +19,12 @@ router.post("/login", (req, res) => {
 
 
 
-// authentication,
-router.put("/logout", (req, res) => {
-	let token = req.credentials;
-	return sendResponse.executeMethod(studentController.logout, token, req, res);
-});
-router.get("/get", (req, res) => {
+
+router.get("/get",authentication, (req, res) => {
 	 let payload = req.query;
    return sendResponse.executeMethod(studentController.getAllStudent, payload, req, res);
 });
-// authentication, 
-router.put("/profile-edit", async (req, res) => {
-  let payload = req.body;
 
-	payload.id = req.credentials.id;
-	return sendResponse.executeMethod(studentController.updateStudent, payload, res);
-});
 
 
 

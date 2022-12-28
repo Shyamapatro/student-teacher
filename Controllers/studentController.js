@@ -5,9 +5,9 @@ const Response = require("../config/response");
 let commonHelper = require("../Helper/common");
 let Services = require("../services");
 let message = require("../config/messages");
-let studentProjection = ["email","firstName", "lastName"];
+let studentProjection = {"email":1,"firstName":1, "lastName":1};
 var ObjectID = require("mongodb").ObjectID;
-const privateKey = "%#ABCD%$KA1&$$@PBA1c@t20L";
+require("dotenv").config();
 let TokenManager = require("../Helper/adminTokenManager");
 module.exports = {
   addStudent: async (payloadData) => {
@@ -54,7 +54,8 @@ module.exports = {
     }
   },
   getAllStudent: async () => {
-    let getAllStudentDetails = await Services.userServices.getAllUsers(studentProjection);
+    console.log("getAllStudent",studentProjection)
+    let getAllStudentDetails = await Services.studentService.getAllStudents(studentProjection);
     if (getAllStudentDetails) {
       return getAllStudentDetails;
     } else {
@@ -94,29 +95,31 @@ module.exports = {
         let tokenData = {
           email: checkEmailExist.email,
           _id: ObjectID(checkEmailExist._id)
-        
-         
         };
 
-        console.log("<<<<<<======",tokenData,"======>>>>>")
-        TokenManager.setToken(tokenData, privateKey, (err, output) => {
+       
+        TokenManager.setToken(tokenData, process.env.PRIVATE_KEY, (err, output) => {
           if (err) {
             
             throw Response.error_msg.implementationError;
           } else {
             if (output && output.accessToken) {
-              console.log("return data from setToken",output.accessToken)
               tokenGenerated = output.accessToken;
+             
             } else {
               throw Response.error_msg.implementationError;
             }
           }
         });
-        delete checkEmailExist.dataValues["password"];
+      
+     delete checkEmailExist['password']
+
+       
         let response = {
           accessToken: tokenGenerated,
           adminDetails: checkEmailExist,
         };
+        console.log("response=======================",response);
         return response;
       }
     } else throw Response.error_msg.emailNotFound;
@@ -136,12 +139,12 @@ module.exports = {
     };
     let admin = await Services.studentService.getstudent(
       criteria,
-      ["_id", "email", "password"]
+      {"_id":1, "email":1, "password":1}
     );
     console.log("Admin Data",admin)
     if (admin) {
       
-      // adminObj = admin.dataValues;
+     
       console.log("Admin Data=================",admin)
       if (admin && admin._id) {
         let criteria = {

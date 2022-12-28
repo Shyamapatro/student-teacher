@@ -4,7 +4,7 @@ const Response = require("../config/response");
 const baseService = require("./base");
 
 exports.addStudent = async (objToSave) => {
-	var newUserData= new Model.Student(objToSave);
+	var newUserData= new Model.Teacher(objToSave);
 	console.log("newUserData",newUserData)
 	return await baseService.saveData(newUserData);
 };

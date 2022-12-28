@@ -33,7 +33,7 @@ exports.updateData = (model, criteria, objToSave) => {
 	return new Promise((resolve, reject) => {
 		model.updateOne(criteria, objToSave)
 			.then(result => {
-				console.log('updateData---',result)
+				
 				resolve(result);
 			}).catch((err) => {
 				console.log(err);

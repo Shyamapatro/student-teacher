@@ -24,9 +24,8 @@ exports.sendErrorMessageBlock = (message, data, res) => {
 };
 exports.executeMethod = async (controllerMethod, payload, req, res) => {
 	try {
-		console.log("-----",payload);
 		let data = await controllerMethod(payload,req,res);
-		console.log("-----",data);
+
 		return this.sendSuccessMessage("success", data, res);
 	} catch (err) {
 		return this.sendErrorMessage(err.isJoi ? err.details[0].message : err.message, {}, res);

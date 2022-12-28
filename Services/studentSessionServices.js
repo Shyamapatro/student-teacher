@@ -15,8 +15,13 @@ exports.saveSessionData = async (objToSave) => {
 
 
  
-exports.deleteSessionData = async(objToSave,critiria) => {
+exports.deleteSessionData = async(objToSave,criteria) => {
 	var newUserData= new Model.Session(objToSave);
 	console.log("newUserData",newUserData)
-	return await baseService.delete(newUserData,critiria);
+	return await baseService.delete(newUserData,criteria);
+};
+
+
+exports.getSessionDetail =async (criteria, projection) => {
+	return await baseService.getSingleRecord(Model.Session, criteria, projection);
 };

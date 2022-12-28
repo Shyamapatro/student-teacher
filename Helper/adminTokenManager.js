@@ -16,9 +16,12 @@ var setTokenInDBAdmin = async (userId, token) => {
 	console.log("createSession",createSession)
 	if (!createSession) throw Response.error_msg.implementationError;
 };
+
+console.log("setTokenInDBAdmin",setTokenInDBAdmin)
 var expireTokenInDBAdmin = async (userId) => {
 	let condition = {
 		userId: userId,
+		
 	};
 	return await Service.studentSessionService.deleteSessionData(condition);
 };
