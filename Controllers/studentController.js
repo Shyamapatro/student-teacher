@@ -170,8 +170,33 @@ module.exports = {
   },
  
 
-  updateStudent: async () => {
+  favTecher: async (payloadData) => {
+    console.log(payloadData.id);
+    try {
+      const schema = Joi.object().keys({
+        favTeacher: Joi.string().optional(),
+      });
 
+      let payload = await commonHelper.verifyJoiSchema(payloadData, schema);
+      console.log("Payload Data", payload);
+      criteria={
+        _id:payloadData.id
+      }
+      objToSave={
+        favTecher:payloadData.favTecher
+      }
+      let UpdateStudentData = await Services.studentService.updateStudent(criteria,objToSave);
+     
+      // let addTecherData = await Services.studentService.updateTeacher(objToSave);
+      if (UpdateStudentData) {
+        return message.success.UPDATED
+      } else {
+        return Response.error_msg.implementationError
+      }
+    } catch (err) {
+      console.log(err)
+      throw Response.error_msg.implementationError
+    }
   },
 
  

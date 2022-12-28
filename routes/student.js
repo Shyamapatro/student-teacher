@@ -50,4 +50,11 @@ router.delete("/delete/:id", (req, res) => {
     return sendResponse.executeMethod(studentController.deleteStudent,req.params,req, res);
 });
 
+
+
+router.put("/fav-teacher", (req, res) => {
+  payload.id = req.credentials.id;
+	return sendResponse.executeMethod(studentController.favTecher, req.body, req, res);
+});
+
 module.exports = router;

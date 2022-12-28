@@ -8,7 +8,12 @@ const TeacherSchema = new Schema(
        lastName: { type: String, required: true },
        email:{type:String ,require:true},
        subject:{type:String,require:true},
-       gender:{type:String,require:true}
+       gender:{type:String,require:true},
+       favStudent: [{
+        type: Schema.Types.ObjectId,
+        ref: 'student'
+     }],
+     TotalCount:{type:Number}
 
     },
     {

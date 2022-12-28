@@ -12,6 +12,8 @@ const StudentSchema = new Schema(
        isDeleted:{type:Boolean},
        passwordResetToken:{type:String},
        accessToken:{type:String},
+       favTeacher: [{type: Schema.Types.ObjectId,ref: 'teacher'}],
+
 
     },
     {
