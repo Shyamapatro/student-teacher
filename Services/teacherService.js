@@ -14,6 +14,11 @@ exports.updateTeacher=async(criteria,objToSave)=>{
 	return await baseService.updateData(Model.Teacher, criteria,objToSave);
 }
 
+exports.deleteTeacher=async(criteria)=>{
+
+	return await baseService.delete(Model.Teacher, criteria);
+}
+
 exports.getTeacher = async(criteria, projection) => {
 	console.log(`get Only One Details`,criteria, projection)
 	return await baseService.getSingleRecord(Model.Teacher, criteria, projection);
@@ -23,7 +28,7 @@ exports.getTeacher = async(criteria, projection) => {
 exports.getAllTeachers = (projection) => {
 	console.log("projection",projection)
 	return new Promise((resolve, reject) => {
-		Model.Teacher.find({},projection)
+		Model.Teacher.find({})
 			.then(result => {
 				console.log("result",result)
 				resolve(result);

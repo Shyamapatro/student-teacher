@@ -15,9 +15,9 @@ module.exports = {
     try {
       const schema = Joi.object().keys({
         firstName: Joi.string().required(),
-        lastName: Joi.string().optional(),
-        email: Joi.string().optional(),
-        gender: Joi.string().optional(),
+        lastName: Joi.string().required(),
+        email: Joi.string().email().required(),
+        gender: Joi.string().valid("Male","Female","Others"),
       });
 
       let payload = await commonHelper.verifyJoiSchema(payloadData, schema);
@@ -55,7 +55,20 @@ module.exports = {
   },
   getAllStudent: async () => {
     console.log("getAllStudent",studentProjection)
-    let getAllStudentDetails = await Services.studentService.getAllStudents(studentProjection);
+    let getAllStudentDetails = await Services.studentService.getAllStudent(studentProjection);
+    if (getAllStudentDetails) {
+      return getAllStudentDetails;
+    } else {
+      throw Response.error_msg.recordNotFound;
+    }
+  },
+  getStudent: async (payloadData) => {
+    console.log("getAllStudent",studentProjection)
+    let projection ={"email":1,"firstName":1, "lastName":1,"favTeacher":1};
+    criteria={
+      _id:Object(payloadData.id)
+    } 
+    let getAllStudentDetails = await Services.studentService.getstudent(criteria,projection);
     if (getAllStudentDetails) {
       return getAllStudentDetails;
     } else {
@@ -73,12 +86,14 @@ module.exports = {
       email: payload.email
     
     };
-    let projection = [...studentProjection];
-    projection.push("password");
+    let projection = {"email":1,"firstName":1,"password":1};
+   
     let checkEmailExist = await Services.studentService.getstudent(
       emailCriteria,
       projection
     );
+
+    console.log("checkEmailExist======*****",checkEmailExist)
   
     if (checkEmailExist && checkEmailExist._id) {
       console.log("Email already exists",checkEmailExist,checkEmailExist._id)
@@ -97,6 +112,8 @@ module.exports = {
           _id: ObjectID(checkEmailExist._id)
         };
 
+
+        console.log("tokenData-----+++++",tokenData)
        
         TokenManager.setToken(tokenData, process.env.PRIVATE_KEY, (err, output) => {
           if (err) {
@@ -171,24 +188,48 @@ module.exports = {
  
 
   favTecher: async (payloadData) => {
-    console.log(payloadData.id);
+    console.log("payloadData......",payloadData);
     try {
       const schema = Joi.object().keys({
-        favTeacher: Joi.string().optional(),
+        favTeacher: Joi.array().items(Joi.string()),
+        id: Joi.string(),
       });
 
       let payload = await commonHelper.verifyJoiSchema(payloadData, schema);
       console.log("Payload Data", payload);
-      criteria={
-        _id:payloadData.id
+       
+      let objToUpdate = {}
+      if (_.has(payload, 'favTeacher') && payload.favTeacher != '')
+        objToUpdate.favTeacher = payload.favTeacher
+
+
+        criteria={
+          _id:ObjectID(payloadData.id)
+        } 
+
+        console.log("criteriaData======",criteria)
+        objToUpdate={
+          favTeacher:payloadData.favTeacher
       }
-      objToSave={
-        favTecher:payloadData.favTecher
-      }
-      let UpdateStudentData = await Services.studentService.updateStudent(criteria,objToSave);
+      console.log("objToUpdate======",objToUpdate)
+      let UpdateStudentData = await Services.studentService.updateStudent(criteria,objToUpdate);
+      
+    //   console.log("UpdateStudentData======",UpdateStudentData)
      
-      // let addTecherData = await Services.studentService.updateTeacher(objToSave);
-      if (UpdateStudentData) {
+        
+    //  console.log("cri=====",cri)
+    //   criteria2={
+    //     _id:ObjectID(cri)
+    //   }
+        
+    //   console.log("criteria2============",criteria2)
+    //   objToSave2={
+    //     favStudent:payloadData.id
+    //   }
+    //   console.log("objToSave2============",objToSave2)
+    //   let UpdateTecherData = await Services.teacherService.updateTeacher(criteria2,objToSave2);
+      
+      if (UpdateStudentData  ) {
         return message.success.UPDATED
       } else {
         return Response.error_msg.implementationError
@@ -199,6 +240,19 @@ module.exports = {
     }
   },
 
- 
+
+
+deleteStudent: async (paramData) => {
+
+    let criteria = {
+      _id: paramData.id
+    }
+    let deleteData = Services.studentService.deleteStudent(criteria)
+    if (deleteData) {
+      return message.success.DELETED
+    } else {
+      throw Response.error_msg.implementationError
+    }
+},
 
 };

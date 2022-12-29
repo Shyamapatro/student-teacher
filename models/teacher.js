@@ -13,7 +13,8 @@ const TeacherSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: 'student'
      }],
-     TotalCount:{type:Number}
+     
+     Count:{type:Number}
 
     },
     {

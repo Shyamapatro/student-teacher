@@ -1,6 +1,7 @@
 module.exports = {
     studentService: require("./studentService"),
-    studentSessionService: require("./studentSessionServices"),
+    studentSessionService: require("./studentSessionService"),
+    teacherService: require("./teacherService"),
     baseService: require("./base")
   };
   

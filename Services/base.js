@@ -1,8 +1,7 @@
 const Response = require("../config/response");
 
 exports.saveData = (payloadData) => {
-    // console.log("Collection Name: " + newUserData)
-	return new Promise((resolve, reject) => {
+ 	return new Promise((resolve, reject) => {
 	    payloadData.save().then((result) => {
 				console.log("data is saved successfully",result)
 				resolve(result);
@@ -12,7 +11,6 @@ exports.saveData = (payloadData) => {
 			});
 	});
 };
-
 
 exports.getSingleRecord = (model, criteria, projection) => {
 	console.log(`getSingle`,model, criteria, projection)
@@ -26,7 +24,6 @@ exports.getSingleRecord = (model, criteria, projection) => {
 			});
 	});
 };
-
 
 exports.updateData = (model, criteria, objToSave) => {
 	console.log('updateData---=====', model, objToSave,criteria);

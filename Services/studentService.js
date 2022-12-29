@@ -19,11 +19,10 @@ exports.getstudent = async(criteria, projection) => {
 	return await baseService.getSingleRecord(Model.Student, criteria, projection);
 };
  
-
-exports.getAllStudents = (projection) => {
+exports.getAllStudent = (projection) => {
 	console.log("projection",projection)
 	return new Promise((resolve, reject) => {
-		Model.Student.find({},projection)
+		Model.Student.findAll({},projection)
 			.then(result => {
 				console.log("result",result)
 				resolve(result);
@@ -33,3 +32,8 @@ exports.getAllStudents = (projection) => {
 			});
 	});
 };
+
+
+exports.deleteStudent=async(criteria)=>{
+return await baseService.delete(Model.Student, criteria);
+}
