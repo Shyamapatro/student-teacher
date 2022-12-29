@@ -75,7 +75,6 @@ module.exports = {
       throw Response.error_msg.recordNotFound;
     }
   },
-
   login: async (payloadData) => {
     const schema = Joi.object().keys({
       email: Joi.string().email().required(),
@@ -185,8 +184,6 @@ module.exports = {
       throw Response.error_msg.InvalidPasswordToken;
     }
   },
- 
-
   favTecher: async (payloadData) => {
     console.log("payloadData......",payloadData);
     try {
@@ -239,10 +236,7 @@ module.exports = {
       throw Response.error_msg.implementationError
     }
   },
-
-
-
-deleteStudent: async (paramData) => {
+  deleteStudent: async (paramData) => {
 
     let criteria = {
       _id: paramData.id
@@ -253,6 +247,6 @@ deleteStudent: async (paramData) => {
     } else {
       throw Response.error_msg.implementationError
     }
-},
+  },
 
 };

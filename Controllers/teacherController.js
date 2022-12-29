@@ -66,9 +66,6 @@ getAllTeacher: async () => {
       throw Response.error_msg.recordNotFound;
     }
   },
-
-
-
 deleteTeacher: async (paramData) => {
 
     let criteria = {
